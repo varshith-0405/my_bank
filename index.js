@@ -1,35 +1,76 @@
 let users = [];
-let user = {};
+let user = {}
+// let useremail = "";
+// let username = "";
+// let currBalance = 0;
 document.write("<div id=root></div>");
-
-function showAllUsers() {
-  let str = `<h2>All Users Data</h2>`;
-
-  if (users.length === 0) {
-    str += `<p>No users registered yet.</p>`;
-  } else {
-    for (let i = 0; i < users.length; i++) {
+function showAllUsers(){
+  let str=`<h2>All Users Data</h2>`
+  if(users.length == 0){
+    str += `<p>No user Found</p>`
+  }else{
+    for(let i=0;i<users.length;i++){
       str += `
-        <div style="border: 1px solid black; padding: 10px; margin: 10px; border-radius: 8px;">
-          <p><b>Name:</b> ${users[i].name}</p>
-          <p><b>Email:</b> ${users[i].email}</p>
-          <p><b>Date of Birth:</b> ${users[i].dob}</p>
-          <p><b>Balance:</b> ${users[i].balance}</p>
-        </div>
-      `;
+      <p><b>Name:</b> ${users[i].name}</p>
+      <p><b>Eami-id:</b> ${users[i].email}</p>
+      <p><b>Balance:</b> ${users[i].balance}</p>`
     }
   }
-
-  str += `<button onclick='home()'>Back</button>`;
-  root.innerHTML = str;
+  str +=`<button onclick='home()'>BACK</button>`
+  root.innerHTML = str
 }
+function showUser() {
+  if (document.getElementById("type").value == "3") {
+    console.log("Transfer")
+    selUser.style.display = 'block'
+    let str = "<option value=0>--Select--</option>";
+    for (let i = 0; i < users.length; i++) {
+      if (users[i].email != user.email) {
+        str += `<option value='${users[i].email}'>${users[i].name}</option>`;
+      }
+    }
+    selUser.innerHTML = str;
+  }
+  else {
+    selUser.style.display = "none"
+  }
+}
+function saveData() {
+  let amount = Number(document.getElementById("amount").value);
+  let type = document.getElementById("type").value;
+  for (let i = 0; i < users.length; i++) {
+    if (users[i].email == user.email) {
+      if (type == "1") {
+        console.log("testing")
+        users[i].balance += amount;
+        spBalance.innerHTML = users[i].balance;
+      } else if (type == "2") {
+        users[i].balance -= amount;
+        spBalance.innerHTML = users[i].balance;
+      } else if (type == "3") {
+        let newUser = document.getElementById("selUser").value;
+        for (let i = 0; i < users.length; i++) {
+          if (users[i].email == newUser) {
+            users[i].balance += amount;
+          }
+        }
+        for (let i = 0; i < users.length; i++) {
+          if (users[i].email == user.email) {
+            users[i].balance -= amount;
+            spBalance.innerHTML = users[i].balance;
+          }
+        }
+      }
 
-
+      break;
+    }
+  }
+}
 function home() {
   let str = `
       <h3>Welcome ${user.name}</h3>
       <button onclick='showLogin()'>Logout</button>
-      <button onclick='showAllUsers()'>View All Users</button>
+      <button onclick='showAllUsers()'>View Users</button>
       <p><select id="type" onchange='showUser()'>
          <option value=0>--Select--</option>
          <option value=1>Deposit</option>
@@ -40,40 +81,41 @@ function home() {
          <p><input type="number" id="amount" placeholder="Enter Amount"></p>
          <button onclick='saveData()'>Submit</button>
          <p><b>Current Balance: <span id='spBalance'>${user.balance}</span></b></p>
-      `;
 
+      `;
   root.innerHTML = str;
 }
-
 function addUser() {
   let name = document.getElementById("name").value;
   let email = document.getElementById("email").value;
   let password = document.getElementById("password").value;
   let dob = document.getElementById("dob").value;
-  let newUser = {
+  let user = {
     name: name,
     email: email,
     password: password,
     dob: dob,
     balance: 0,
   };
-  users.push(newUser);
+  users.push(user);
   showLogin();
 }
-
 function chkUser() {
   let email = document.getElementById("email").value;
   let password = document.getElementById("password").value;
   for (let i = 0; i < users.length; i++) {
     if (users[i].email == email && users[i].password == password) {
-      user = users[i];
+      // useremail = email;
+      // username = users[i].name;
+      // currBalance = users[i].balance;
+      user = users[i]
       home();
-      return;
+      break;
+    } else {
+      msg.innerHTML = "Access Denied";
     }
   }
-  msg.innerHTML = "Access Denied";
 }
-
 function showForm() {
   let str = `
   <h2>Registration Form</h2>
@@ -86,14 +128,13 @@ function showForm() {
   `;
   root.innerHTML = str;
 }
-
 function showLogin() {
   let str = `
   <div>
       <h2>Login Form</h2>
       <div id='msg'></div>
-      <p><input id="email" type="text" placeholder="enter email"></p>
-      <p><input id="password" type="password" placeholder="enter password"></p>
+      <p><input id="email" type="text"></p>
+      <p><input id="password" type="password"></p>
       <button onclick='chkUser()'>Log In</button>
       <p><button onclick='showForm()'>Create Account</button></p>
   </div>
