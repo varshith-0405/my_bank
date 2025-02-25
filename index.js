@@ -26,6 +26,7 @@ function showUser() {
     let str = "<option value=0>--Select--</option>";
     for (let i = 0; i < users.length; i++) {
       if (users[i].email != user.email) {
+        
         str += `<option value='${users[i].email}'>${users[i].name}</option>`;
       }
     }
@@ -100,6 +101,21 @@ function addUser() {
   users.push(user);
   showLogin();
 }
+function addUser() {
+  let name = document.getElementById("name").value;
+  let email = document.getElementById("email").value;
+  let password = document.getElementById("password").value;
+  let dob = document.getElementById("dob").value;
+  let user = {
+    name: name,
+    email: email,
+    password: password,
+    dob: dob,
+    balance: 0,
+  };
+  users.push(user);
+  showLogin();
+}
 function chkUser() {
   let email = document.getElementById("email").value;
   let password = document.getElementById("password").value;
@@ -109,7 +125,7 @@ function chkUser() {
       // username = users[i].name;
       // currBalance = users[i].balance;
       user = users[i]
-      home();
+      
       break;
     } else {
       msg.innerHTML = "Access Denied";
@@ -128,18 +144,6 @@ function showForm() {
   `;
   root.innerHTML = str;
 }
-function showLogin() {
-  let str = `
-  <div>
-      <h2>Login Form</h2>
-      <div id='msg'></div>
-      <p><input id="email" type="text"></p>
-      <p><input id="password" type="password"></p>
-      <button onclick='chkUser()'>Log In</button>
-      <p><button onclick='showForm()'>Create Account</button></p>
-  </div>
-  `;
-  root.innerHTML = str;
-}
+
 
 showLogin();
