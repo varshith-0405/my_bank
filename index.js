@@ -1,39 +1,50 @@
+
 let users = [];
-let user = {}
-// let useremail = "";
-// let username = "";
-// let currBalance = 0;
+let user = {};
 document.write("<div id=root></div>");
-function showAllUsers(){
-  let str=`<h2>All Users Data</h2>`
-  if(users.length == 0){
-    str += `<p>No user Found</p>`
-  }else{
-    for(let i=0;i<users.length;i++){
-      str += `
-      <p><b>Name:</b> ${users[i].name}</p>
-      <p><b>Eami-id:</b> ${users[i].email}</p>
-      <p><b>Balance:</b> ${users[i].balance}</p>`
-    }
+function showHeader() {
+  let str = `
+  <div class="row bg-success">
+          <div class="col-lg-8">
+            <h1>My Bank</h1>
+          </div>
+          <div class="col-lg-4 text-end">
+          <button onclick='showHome()'>Home</button>
+          ${
+            user.email
+              ? "<button onclick='showLogout()'>Logout</button>"
+              : "<button onclick='showLogin()'>Login</button>"
+          }
+            <!-- <button onclick="toggle('dark')" class="btn btn-dark">Dark</button>
+            <button onclick="toggle('light')" class="btn btn-light">Light</button> -->
+          </div>
+        </div>
+  `;
+  header.innerHTML = str;
+}
+
+function toggle(color) {
+  if (color == "dark") {
+    document.body.style.background = "black";
+    document.body.style.color = "white";
+  } else {
+    document.body.style.background = "white";
+    document.body.style.color = "black";
   }
-  str +=`<button onclick='home()'>BACK</button>`
-  root.innerHTML = str
 }
 function showUser() {
   if (document.getElementById("type").value == "3") {
-    console.log("Transfer")
-    selUser.style.display = 'block'
+    console.log("Transfer");
+    selUser.style.display = "block";
     let str = "<option value=0>--Select--</option>";
     for (let i = 0; i < users.length; i++) {
       if (users[i].email != user.email) {
-        
         str += `<option value='${users[i].email}'>${users[i].name}</option>`;
       }
     }
     selUser.innerHTML = str;
-  }
-  else {
-    selUser.style.display = "none"
+  } else {
+    selUser.style.display = "none";
   }
 }
 function saveData() {
@@ -42,7 +53,7 @@ function saveData() {
   for (let i = 0; i < users.length; i++) {
     if (users[i].email == user.email) {
       if (type == "1") {
-        console.log("testing")
+        console.log("testing");
         users[i].balance += amount;
         spBalance.innerHTML = users[i].balance;
       } else if (type == "2") {
@@ -67,39 +78,31 @@ function saveData() {
     }
   }
 }
+
+function showLogout() {
+  user = {};
+  showHeader();
+  showHome();
+}
 function home() {
+  showHeader();
   let str = `
+  <div class="w-100 bg-light p-5 rounded text-center">
       <h3>Welcome ${user.name}</h3>
       <button onclick='showLogin()'>Logout</button>
-      <button onclick='showAllUsers()'>View Users</button>
-      <p><select id="type" onchange='showUser()'>
+      <p><select id="type" class="form-control" onchange='showUser()'>
          <option value=0>--Select--</option>
          <option value=1>Deposit</option>
          <option value=2>Withdraw</option>
          <option value=3>Transfer</option>
          </select></p>
-         <p><select style="display:none" id="selUser"></select></p>
-         <p><input type="number" id="amount" placeholder="Enter Amount"></p>
-         <button onclick='saveData()'>Submit</button>
+         <p><select style="display:none" id="selUser" class="form-control"></select></p>
+         <p><input type="number" id="amount" class="form-control" placeholder="Enter Amount"></p>
+         <button onclick='saveData()' class="form-control btn btn-success">Submit</button>
          <p><b>Current Balance: <span id='spBalance'>${user.balance}</span></b></p>
-
+    </div>
       `;
   root.innerHTML = str;
-}
-function addUser() {
-  let name = document.getElementById("name").value;
-  let email = document.getElementById("email").value;
-  let password = document.getElementById("password").value;
-  let dob = document.getElementById("dob").value;
-  let user = {
-    name: name,
-    email: email,
-    password: password,
-    dob: dob,
-    balance: 0,
-  };
-  users.push(user);
-  showLogin();
 }
 function addUser() {
   let name = document.getElementById("name").value;
@@ -124,8 +127,8 @@ function chkUser() {
       // useremail = email;
       // username = users[i].name;
       // currBalance = users[i].balance;
-      user = users[i]
-      
+      user = users[i];
+      home();
       break;
     } else {
       msg.innerHTML = "Access Denied";
@@ -134,16 +137,51 @@ function chkUser() {
 }
 function showForm() {
   let str = `
+  <div class="w-100 bg-light p-2 rounded text-center">
   <h2>Registration Form</h2>
-  <p><input type="text" id="name" placeholder="Name"></p>
-  <p><input type="text" id="email" placeholder="Email"></p>
-  <p><input type="password" id="password" placeholder="Password"></p>
-  <p><input type="date" id="dob"></p>
-  <p><button onclick='addUser()'>Submit</button></p>
-  <p>Already a member?<button onclick='showLogin()'>Login Here</button></p>
+  <p><input type="text" class="form-control" id="name" placeholder="Name"></p>
+  <p><input type="text" class="form-control" id="email" placeholder="Email"></p>
+  <p><input type="password" class="form-control" id="password" placeholder="Password"></p>
+  <p><input type="date" class="form-control" id="dob"></p>
+  <p><button onclick='addUser()' class="form-control btn btn-success">Submit</button></p>
+  <p>Already a member?<button onclick='showLogin()' class="form-control btn btn-primary">Login Here</button></p>
+  </div>
+  `;
+  root.innerHTML = str;
+}
+function showLogin() {
+  let str = `
+  <div class="w-100 bg-light m-3 p-5 rounded text-center">
+      <h2>Login Form</h2>
+      <div id='msg'></div>
+      <p><input id="email" class='form-control' placeholder='Email address' type="text"></p>
+      <p><input id="password" class='form-control' placeholder='Password' type="password"></p>
+      <button onclick='chkUser()' class="btn btn-primary w-100">Log In</button>
+      <p><button onclick='showForm()' class="btn btn-success mt-3">Create Account</button></p>
+  </div>
   `;
   root.innerHTML = str;
 }
 
+function showHome() {
+  showHeader();
+  let str = `
+<div class="card text-center">
+  <div class="card-header">
+    Featured
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Best Bank of the Year</h5>
+    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+    <button onclick='showForm()' class="btn btn-primary">Create Account</button>
+  </div>
+  <div class="card-footer text-muted">
+    2 days ago
+  </div>
+</div>
 
-showLogin();
+`;
+  root.innerHTML = str;
+}
+
+showHome();
